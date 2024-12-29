@@ -1,5 +1,6 @@
 const express = require('express');
 const WebSocket = require('ws');
+const cors = require('cors')
 const http = require('http');
 
 const app = express();
@@ -11,6 +12,7 @@ const wss = new WebSocket.Server({ server, path: '/ws' });
 
 let sseClients = [];
 
+app.use(cors())
 
 app.use(express.static('public'));
 
