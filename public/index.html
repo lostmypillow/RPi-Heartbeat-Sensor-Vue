@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time BPM Display (SSE)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    .bpm-display {
+      font-size: 48px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time BPM Display</h1>
+  <div class="bpm-display" id="bpmDisplay">Waiting for BPM data...</div>
+
+  <script>
+    const eventSource = new EventSource('/sse');
+
+    function updateBpmDisplay(data) {
+      const bpmDisplay = document.getElementById('bpmDisplay');
+      bpmDisplay.textContent = `BPM: ${data.bpm}`;
+    }
+
+    eventSource.onopen = () => {
+      console.log('SSE connection established');
+    };
+
+    eventSource.onmessage = (event) => {
+      const message = JSON.parse(event.data); // Parse the received JSON message
+      console.log('Received data:', message);
+
+      if (message.bpm !== undefined) {
+        updateBpmDisplay(message);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.log(`SSE error: ${error}`);
+    };
+
+    eventSource.onclose = () => {
+      console.log('SSE connection closed');
+    };
+  </script>
+</body>
+</html>
