@@ -26,7 +26,7 @@
 
     function updateBpmDisplay(data) {
       const bpmDisplay = document.getElementById('bpmDisplay');
-      bpmDisplay.textContent = `BPM: ${data.bpm}`;
+      bpmDisplay.textContent = `BPM: ${Math.floor(data.bpm)}`;
     }
 
     eventSource.onopen = () => {
